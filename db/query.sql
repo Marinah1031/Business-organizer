@@ -1,5 +1,5 @@
-SELECT department.name AS department, roles.salary
+SELECT department.name AS department, reviews.review
 FROM roles
 LEFT JOIN department
-ON roles_id = department.id
+ON reviews.roles_id = department.id
 ORDER BY department.name;
