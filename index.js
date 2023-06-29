@@ -1,5 +1,23 @@
 const inquirer = require('inquirer');
 const mysql = require("mysql2");
+const express = require('express');
+const app = express();
+
+const connection = mysql.createConnection({
+    host:"localhost",
+    port: 3001,
+    user: "root",
+    password: "",
+    database: "department_db",
+});
+
+connection.connect((err) => {
+    if (err) {
+        console.error('Error connecting to the database: ' + err.stack);
+        return;
+      }
+      console.log('Connected to the database as ID ' + connection.threadId);
+    });
 
 
 function prompt_questions () {
@@ -48,6 +66,8 @@ function prompt_questions () {
             }
         })
     }
+
+  
     //function to view the departments from the table
     function viewAllDepartments() {
         const query = "SELECT * FROM departments";
@@ -55,7 +75,11 @@ function prompt_questions () {
             if (err) throw err;
             console.table(res);
             prompt_questions();
-        })
+        });
+    }
+
+    function viewAllRoles() {
+        const query = "SELECT roles.title"
     }
 // const prompt_questions = () => {
 //     inquirer
@@ -73,4 +97,3 @@ function prompt_questions () {
 // };
 
 //call prompt questions
-prompt_questions ()
