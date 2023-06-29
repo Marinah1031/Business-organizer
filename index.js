@@ -47,6 +47,15 @@ function start () {
             }
         })
     }
+    //function to view the departments from the table
+    function viewAllDepartments() {
+        const query = "SELECT * FROM departments";
+        connection.query(query, (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            start();
+        })
+    }
 const prompt_questions = () => {
     inquirer
     .prompt(questions)
