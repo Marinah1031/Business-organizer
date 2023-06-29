@@ -1,7 +1,8 @@
 const inquirer = require('inquirer');
 const mysql = require("mysql2");
 
-function start () {
+
+function prompt_questions () {
     inquirer
         .prompt({
             type:"list",
@@ -53,23 +54,23 @@ function start () {
         connection.query(query, (err, res) => {
             if (err) throw err;
             console.table(res);
-            start();
+            prompt_questions();
         })
     }
-const prompt_questions = () => {
-    inquirer
-    .prompt(questions)
-    .then((answers) => {
-     console.log(answers);
-    })
-    .catch((error) => {
-      if (error.isTtyError) {
+// const prompt_questions = () => {
+//     inquirer
+//     .prompt(questions)
+//     .then((answers) => {
+//      console.log(answers);
+//     })
+//     .catch((error) => {
+//       if (error.isTtyError) {
         // Prompt couldn't be rendered in the current environment
-      } else {
+    //   } else {
         // Something else went wrong
-      }
-    });
-};
+//       }
+//     });
+// };
 
 //call prompt questions
 prompt_questions ()
