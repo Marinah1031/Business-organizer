@@ -5,9 +5,8 @@ const app = express();
 
 const connection = mysql.createConnection({
     host:"localhost",
-    port: 3001,
     user: "root",
-    password: "",
+    password: "Marinah1031",
     database: "department_db",
 });
 
@@ -70,7 +69,7 @@ function prompt_questions () {
   
     //function to view the departments from the table
     function viewAllDepartments() {
-        const query = "SELECT * FROM departments";
+        const query = "SELECT * FROM department";
         connection.query(query, (err, res) => {
             if (err) throw err;
             console.table(res);
@@ -79,8 +78,32 @@ function prompt_questions () {
     }
 
     function viewAllRoles() {
-        const query = "SELECT roles.title"
-    }
+        const query = "SELECT * FROM roles";
+        connection.query(query, (err, res) => {
+          if (err) throw err;
+          console.table(res);
+          prompt_questions();
+        });
+      }
+
+      
+    function viewAllEmployees() {
+        const query = "SELECT * FROM employee";
+        connection.query(query, (err, res) => {
+          if (err) throw err;
+          console.table(res);
+          prompt_questions();
+        });
+      }
+    
+    function viewAllEmployees() {
+        const query = "SELECT * FROM employee";
+        connection.query(query, (err, res) => {
+          if (err) throw err;
+          console.table(res);
+          prompt_questions();
+        });
+      }
 // const prompt_questions = () => {
 //     inquirer
 //     .prompt(questions)
@@ -96,4 +119,4 @@ function prompt_questions () {
 //     });
 // };
 
-//call prompt questions
+prompt_questions();
