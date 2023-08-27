@@ -5,7 +5,10 @@ const app = express();
 
 const connection = mysql.createConnection({
     host:"localhost",
+    //username
     user: "root",
+
+    //password
     password: "Marinah1031",
     database: "department_db",
 });
@@ -104,6 +107,13 @@ function prompt_questions () {
           prompt_questions();
         });
       }
+
+
+      prompt_questions();
+
+      //Delete and Employee
+
+
 // const prompt_questions = () => {
 //     inquirer
 //     .prompt(questions)
@@ -119,4 +129,3 @@ function prompt_questions () {
 //     });
 // };
 
-prompt_questions();
