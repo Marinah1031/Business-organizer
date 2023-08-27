@@ -31,6 +31,28 @@ updateRoleOfAnEmployee(roleId, employeeId) {
     );
     }
 
+    findAllRoles() {
+        return this.connection.promise().query(
+          "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;"
+        );
+      }
+    // Create a new role
+  createRole(role) {
+    return this.connection.promise().query("INSERT INTO role SET ?", role);
+  }
+
+    // Find all departments
+    findAllDepartments() {
+        return this.connection.promise().query(
+          "SELECT department.id, department.name FROM department;"
+        );
+      }
+ // Create a new department
+ createDepartment(department) {
+    return this.connection.promise().query("INSERT INTO department SET ?", department);
+  }
 
 
 }
+
+module.exports = new DB(connection);

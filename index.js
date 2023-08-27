@@ -68,7 +68,16 @@ function prompt_questions () {
             }
         })
     }
+// Viewing all employees
 
+function viewAllEmployees() {
+    db.findAllEmployees()
+    .then(([rows])=> {
+        let employees = rows;
+        console.table(employees);
+    })
+    .then(() => prompt_questions())
+}
   
     //function to view the departments from the table
     function viewAllDepartments() {
@@ -108,10 +117,46 @@ function prompt_questions () {
         });
       }
 
+      function updateAnEmployeeRole() {
+        db.findAllEmployeesAllEmployees()
+        .then(([rows]) => {
+            let employyes = rows;
+            const employeeChoices = employees.map(({ id, first_name, last_name}) => 
+            ({ name: `${first_name} ${last_name}` , value: id }) );
 
-      prompt_questions();
+            prompt([
+                { 
+                type: 'list', 
+                name: "employeeId",
+                message: `Which employee's role would you like to change?`, 
+                choices: employeeChoices }
+            ])
+            .then(res => {
+                let employeeId = res.employeeId;
+                db.viewAllRoles()
+                .then(([rows]) => {
+                    let roles = rows;
+                    const roleChoices = roles.map(({ id, title}) => ({
+                        name: `${title}`,
+                        value: id
+                    }));
 
-      //Delete and Employee
+                    prompt([
+                        {
+                            type: 'list',
+                            name: "roleId",
+                            message: `What is the new role of this employee?`,
+                            choices: roleChoices
+                        }
+                    ])
+                    .then(res => db.updateAnEmployeeRole(employeeId, res.roleId))
+                    .then(() => console.log("Updated Employee's role"))
+                    .then(() => prompt_questions())
+                })
+            })
+        })
+
+      }
 
 
 // const prompt_questions = () => {
