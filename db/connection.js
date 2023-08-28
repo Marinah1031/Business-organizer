@@ -14,3 +14,4 @@ const connection = mysql.createConnection({
     password: "",
     database: "department_db",
 });
+
