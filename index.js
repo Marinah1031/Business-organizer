@@ -3,24 +3,10 @@ const mysql = require("mysql2");
 const express = require('express');
 const app = express();
 
-const connection = mysql.createConnection({
-    host: "localhost",
-    //username
-    user: "root",
+const db = require('./db')
 
-    //password
-    password: "",
-    database: "department_db",
-});
-
-connection.connect((err) => {
-    if (err) {
-        console.error('Error connecting to the database: ' + err.stack);
-        return;
-    }
     //console.log('Connected to the database as ID ' + connection.threadId);
     prompt_questions();
-});
 
 
 function prompt_questions() {
@@ -63,7 +49,7 @@ function prompt_questions() {
                     updateAnEmployeeRole();
                     break;
                 case "Exit":
-                    connection.end();
+                    db.end();
                     console.log("Done");
                     break;
             }
@@ -73,7 +59,7 @@ function prompt_questions() {
 
 function viewAllEmployees() {
     const query = "SELECT employee.id, CONCAT(employee.first_name, ' ', employee.last_name) AS employee, roles.title, department.name AS department, roles.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN roles on employee.roles_id = roles.id LEFT JOIN department on roles.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;";
-    connection.query(query, (err, res) => {
+    db.query(query, (err, res) => {
         if (err) throw err;
         console.table(res);
         prompt_questions();
@@ -82,18 +68,17 @@ function viewAllEmployees() {
 
 //function to view the departments from the table
 function viewAllDepartments() {
-    const query = "SELECT * FROM department";
-    connection.query(query, (err, res) => {
-        if (err) throw err;
-        console.table(res);
-        prompt_questions();
-    });
-}
+    inquirer
+        .then(answer => {
+            db.findAllDepartments([answer]) 
+                .then(() => console.log(`Added ${answer.name} to the database`))
+                .then(() => prompt_questions())
+        })};
 
 function viewAllRoles() {
     const query = "SELECT roles.id, roles.title, department.name AS department, roles.salary FROM roles LEFT JOIN department on roles.department_id = department.id";
 
-    connection.query(query, (err, res) => {
+    db.query(query, (err, res) => {
         if (err) throw err;
         console.table(res);
         prompt_questions();
@@ -111,17 +96,9 @@ function addAdepartment() {
         }
     ])
         .then(answer => {
-            const query = `INSERT INTO department SET ?`;
-
-                connection.query(query, [answer], (err, res) => {
-                    if (err) throw err;
-                    console.log(`Added ${answer.name} to the database`)
-                    prompt_questions();
-                });
-            //let name = res;
-            // db.createDepartment(name)
-            //     .then(() => console.log(`Added ${name.name} to the database`))
-            //     .then(() => prompt_questions())
+            db.createDepartment([answer]) 
+                .then(() => console.log(`Added ${answer.name} to the database`))
+                .then(() => prompt_questions())
         })
 }
 
