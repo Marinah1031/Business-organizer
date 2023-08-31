@@ -149,7 +149,15 @@ function addArole() {
 //Add an Employee
 
 function addAnEmployee() {
-    prompt([
+    db.findAllDepartments()
+    .then(([rows]) => {
+        const department_id = rows;
+        const departmentChoices = department_id.map(({ id, name }) => ({
+            name: name,
+            value: id
+        }));
+        inquirer
+    .prompt([
         {
             name: "first_name",
             message: "What is the employee's first name?"
@@ -214,6 +222,7 @@ function addAnEmployee() {
                 })
         })
 }
+
 
 //update an employee role
 function updateAnEmployeeRole() {
