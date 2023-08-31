@@ -6,9 +6,11 @@ class DB {
 }
 // Finding all employees, roles and departements are also there to show roles, salaries, departments, and etc. 
 findAllEmployees() {
-    return this.connection.promise().query(
-        "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;"
+    const emp =  this.connection.promise().query(
+        "SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name AS department, roles.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN roles on employee.roles_id = roles.id LEFT JOIN department on roles.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;"
     );
+    console.log(emp)
+    return (emp)
 }
 // Finding all the employees without the given employee id.
 findAllManagers(employeeId) {
@@ -25,20 +27,20 @@ createNewEmployee(employee) {
 }
 
 //Update the employee's role
-updateRoleOfAnEmployee(roleId, employeeId) {
+updateRoleOfAnEmployee(rolesId, employeeId) {
     return this.connection.promise().query(
-        "UPDATE employee SET roles_id=? WHERE id=?", [roleId, employeeId]
+        "UPDATE employee SET roles_id=? WHERE id=?", [rolesId, employeeId]
     );
     }
 
     findAllRoles() {
         return this.connection.promise().query(
-          "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;"
+          "SELECT roles.id, roles.title, department.name AS department, roles.salary FROM roles LEFT JOIN department on roles.department_id = department.id;"
         );
       }
     // Create a new role
-  createRole(role) {
-    return this.connection.promise().query("INSERT INTO role SET ?", role);
+  createRole(roles) {
+    return this.connection.promise().query("INSERT INTO roles SET ?", roles);
   }
 
     // Find all departments
