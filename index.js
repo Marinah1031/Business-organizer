@@ -103,33 +103,46 @@ function addAdepartment() {
 //Add a role
 function addArole() {
     db.findAllDepartments()
-      const departmentChoices = department.map(({ id, name }) => ({
-        name: name,
-        value: id
-      }));
-    inquirer
-    .prompt([
-        {
-            name: 'title',
-            message: "What is the name of the role?"
-        },
-        {
-            name: "salary",
-            message: "How much does the role make?"
-        },
-        {
-            type: "list",
-            name: "department",
-            message: "Which department will this role be in?",
-            choices: departmentChoices
-        }
-    ])
-        .then(roles => {
-            db.createRoles(roles)
-                .then(() => console.log(`Added ${roles.title} to the database`))
-                .then(() => prompt_questions())
+        .then(([rows]) => {
+            const department_id = rows;
+            const departmentChoices = department_id.map(({ id, name }) => ({
+                name: name,
+                value: id
+            }));
+
+            inquirer
+                .prompt([
+                    {
+                        name: 'title',
+                        message: "What title does the role have?"
+                    },
+                    {
+                        name: "salary",
+                        message: "How much does the role make?"
+                    },
+                    {
+                        type: "list",
+                        name: "department_id",
+                        message: "Which department will this role be in?",
+                        choices: departmentChoices
+                    }
+                ])
+                .then(rolesData => {
+                    db.createRole(rolesData)
+                        .then(() => console.log(`Added ${rolesData.title} to the database`))
+                        .then(() => prompt_questions())
+                        .catch(error => {
+                            console.error(error);
+                            console.log("Error adding role to the database.");
+                        });
+                });
         })
+        .catch(error => {
+            console.error(error);
+            console.log("Error fetching departments from the database.");
+        });
 }
+
 
 
 
