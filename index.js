@@ -5,8 +5,8 @@ const app = express();
 
 const db = require('./db')
 
-    //console.log('Connected to the database as ID ' + connection.threadId);
-    prompt_questions();
+//console.log('Connected to the database as ID ' + connection.threadId);
+prompt_questions();
 
 
 function prompt_questions() {
@@ -59,43 +59,42 @@ function prompt_questions() {
 
 function viewAllEmployees() {
     db.findAllEmployees()
-    .then(data => {
-        console.table(data[0]);
+        .then(data => {
+            console.table(data[0]);
 
-    })
-    .then(() => prompt_questions());
-    
+        })
+        .then(() => prompt_questions());
+
 }
 
 //function to view the departments from the table
 function viewAllDepartments() {
 
-            db.findAllDepartments() 
-                .then((data) => console.table(data[0]))
-                .then(() => prompt_questions())
+    db.findAllDepartments()
+        .then((data) => console.table(data[0]))
+        .then(() => prompt_questions())
 };
 
 function viewAllRoles() {
-   
-    db.(query, (err, res) => {
-        if (err) throw err;
-        console.table(res);
-        prompt_questions();
-    });
-}
+
+    db.findAllRoles()
+        .then((data) => console.table(data[0]))
+        .then(() => prompt_questions())
+};
+
 
 
 //Add a dapartment
 function addAdepartment() {
     inquirer
-    .prompt([
-        {
-            name: "name",
-            message: "What is the name of the department?"
-        }
-    ])
+        .prompt([
+            {
+                name: "department",
+                message: "What is the name of the department?"
+            }
+        ])
         .then(answer => {
-            db.createDepartment([answer]) 
+            db.createDepartment([answer])
                 .then(() => console.log(`Added ${answer.name} to the database`))
                 .then(() => prompt_questions())
         })
@@ -104,37 +103,35 @@ function addAdepartment() {
 //Add a role
 function addArole() {
     db.findAllDepartments()
-        .then(([rows]) => {
-            let departments = rows;
-            const departmentChoices = departments.map(({ id, name }) => ({
-                name: name,
-                value: id
-            }));
-
-            prompt([
-                {
-                    name: 'title',
-                    message: "What is the name of the role?"
-                },
-                {
-                    name: "salary",
-                    message: "How much does the role make?"
-                },
-                {
-                    type: "list",
-                    name: "department_id",
-                    message: "Which department will this role be in?",
-                    choices: departmentChoices
-                }
-            ])
-                .then(roles => {
-                    db.createRoles(roles)
-                        .then(() => console.log(`Added ${roles.title} to the database`))
-                        .then(() => prompt_questions())
-                })
+      const departmentChoices = department.map(({ id, name }) => ({
+        name: name,
+        value: id
+      }));
+    inquirer
+    .prompt([
+        {
+            name: 'title',
+            message: "What is the name of the role?"
+        },
+        {
+            name: "salary",
+            message: "How much does the role make?"
+        },
+        {
+            type: "list",
+            name: "department",
+            message: "Which department will this role be in?",
+            choices: departmentChoices
+        }
+    ])
+        .then(roles => {
+            db.createRoles(roles)
+                .then(() => console.log(`Added ${roles.title} to the database`))
+                .then(() => prompt_questions())
         })
-
 }
+
+
 
 //Add an Employee
 
