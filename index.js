@@ -228,8 +228,8 @@ function updateAnEmployeeRole() {
             let employees = rows;
             const employeeChoices = employees.map(({ id, first_name, last_name }) =>
                 ({ name: `${first_name} ${last_name}`, value: id }));
-
-            prompt([
+            inquirer
+            .prompt([
                 {
                     type: 'list',
                     name: "employeeId",
@@ -246,16 +246,16 @@ function updateAnEmployeeRole() {
                                 name: `${title}`,
                                 value: id
                             }));
-
-                            prompt([
+                            inquirer
+                            .prompt([
                                 {
                                     type: 'list',
-                                    name: "rolesId",
+                                    name: "roles_id",
                                     message: `What is the new role of this employee?`,
                                     choices: rolesChoices
                                 }
                             ])
-                                .then(res => db.updateAnEmployeeRole(employeeId, res.rolesId))
+                                .then(res => db.updateAnEmployeeRole(employeeId, res.roles_id))
                                 .then(() => console.log("Updated Employee's role"))
                                 .then(() => prompt_questions())
                         })

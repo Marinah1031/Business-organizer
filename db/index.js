@@ -27,9 +27,9 @@ createNewEmployee(employee) {
 }
 
 //Update the employee's role
-updateRoleOfAnEmployee(rolesId, employeeId) {
+updateRoleOfAnEmployee(roles_id, employeeId) {
     return this.connection.promise().query(
-        "UPDATE employee SET roles_id=? WHERE id=?", [rolesId, employeeId]
+        "UPDATE employee SET roles_id=? WHERE id=?", [roles_id, employeeId]
     );
     }
 
