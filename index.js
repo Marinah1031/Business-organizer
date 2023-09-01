@@ -46,7 +46,7 @@ function prompt_questions() {
                     addAnEmployee();
                     break;
                 case "Update an employee role":
-                    updateAnEmployeeRole();
+                    updateRoleOfAnEmployee();
                     break;
                 case "Exit":
                     db.end();
@@ -113,8 +113,8 @@ function addArole() {
             inquirer
                 .prompt([
                     {
-                        name: 'title',
-                        message: "What title does the role have?"
+                        name: 'role',
+                        message: "What name does the role have?"
                     },
                     {
                         name: "salary",
@@ -222,11 +222,11 @@ function addAnEmployee() {
 
 
 //update an employee role
-function updateAnEmployeeRole() {
+function updateRoleOfAnEmployee() {
     db.findAllEmployees()
         .then(([rows]) => {
-            let employees = rows;
-            const employeeChoices = employees.map(({ id, first_name, last_name }) =>
+            let employeeId = rows;
+            const employeeChoices = employeeId.map(({ id, first_name, last_name }) =>
                 ({ name: `${first_name} ${last_name}`, value: id }));
             inquirer
             .prompt([
@@ -239,11 +239,11 @@ function updateAnEmployeeRole() {
             ])
                 .then(res => {
                     let employeeId = res.employeeId;
-                    db.viewAllRoles()
+                    db.findAllRoles()
                         .then(([rows]) => {
                             let roles = rows;
                             const rolesChoices = roles.map(({ id, title }) => ({
-                                name: `${title}`,
+                                name: title,
                                 value: id
                             }));
                             inquirer
@@ -255,7 +255,7 @@ function updateAnEmployeeRole() {
                                     choices: rolesChoices
                                 }
                             ])
-                                .then(res => db.updateAnEmployeeRole(employeeId, res.roles_id))
+                                .then(res => db.updateRoleOfAnEmployee(employeeId, res.roles_id))
                                 .then(() => console.log("Updated Employee's role"))
                                 .then(() => prompt_questions())
                         })
@@ -265,18 +265,4 @@ function updateAnEmployeeRole() {
 }
 
 
-// const prompt_questions = () => {
-//     inquirer
-//     .prompt(questions)
-//     .then((answers) => {
-//      console.log(answers);
-//     })
-//     .catch((error) => {
-//       if (error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
-    //   } else {
-        // Something else went wrong
-//       }
-//     });
-// };
 
