@@ -231,56 +231,40 @@ async function updateRoleOfAnEmployee() {
             value: id
         }));
 
-        const {employeeId}
+        const {employeeId} = await inquirer.prompt([
+            {
+                type:"list" ,  // list of questions for user input
+                name:'employeeId',
+                message : 'Which Employee would you like to change?',
+                choices: employeeChoices
+                }
+        ]);
+        const [rolesRow ]=await db.findAllRoles();  
+        const rolesChoices = rolesRow.map(({ id, title }) => ({
+            name: `${title} ${id}`,
+            value: id
+        }));
+
+        const {roles_id} = await inquirer.prompt ([
+            {
+                type:'list',
+                name: "roles_id",
+                message :"What is their new Role?",
+                choices: rolesChoices
+            }
+        ]);
+
+        await db.updateRoleOfAnEmployee(employeeId, roles_id);
+        console.log("Role Updated");
+        await prompt_questions();
+    } catch (error) {
+        console.log(error);
+        console.log("Error fetching or updating data from the database");
     }
-}
-// function updateRoleOfAnEmployee() {
-//     db.findAllEmployees()
-//         .then(([rows]) => {
-//             let employeeId = rows;
-//             const employeeChoices = employeeId.map(({ id, first_name, last_name }) =>
-//                 ({ name: `${first_name} ${last_name}`, value: id }));
-//             inquirer
-//             .prompt([
-//                 {
-//                     type: 'list',
-//                     name: "employeeId",
-//                     message: `Which employee's role would you like to change?`,
-//                     choices: employeeChoices
-//                 }
-//             ])
-//                 .then(res => {
-//                     let employeeId = res.employeeId;
-//                     db.findAllRoles()
-//                         .then(([rows]) => {
-//                             let roles = rows;
-//                             const rolesChoices = roles.map(({ id, title }) => ({
-//                                 name: title + ' ' + id,
-//                                 value: id
-//                             }));
-//                             inquirer
-//                             .prompt([
-//                                 {
-//                                     type: 'list',
-//                                     name: "roles_id",
-//                                     message: `What is the new role of this employee?`,
-//                                     choices: rolesChoices
-//                                 }
-//                             ])
-
-//                                 .then(res => db.updateRoleOfAnEmployee(employeeId, res.roles_id))
-//                                 .then(() => console.log("Updated Employee's role"))
-//                                 .then(() => prompt_questions())
-
-//                                 .catch(error => {
-//                                     console.error(error);
-//                                     console.log("Error fetching departments from the database.");
-//                                 });
-//                         })
-//                 })
-//         })
-
-// }
+    }
+    
 
 
 
+
+  
