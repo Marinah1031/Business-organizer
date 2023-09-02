@@ -7,7 +7,7 @@ const db = require('./db')
 //console.log('Connected to the database as ID ' + connection.threadId);
 prompt_questions();
 
-
+//a list of questions using the inquirer with ability to choose what action to take
 function prompt_questions() {
     inquirer
         .prompt({
@@ -24,7 +24,9 @@ function prompt_questions() {
                 "Update an employee role",
             ],
         })
+// part of a promise chain that recieves the answer paramter 
         .then((answer) => {
+            //the switch statement checks the value of answer.action, that represents the users selected action from the menu
             switch (answer.action) {
                 case "View all departments":
                     viewAllDepartments();
@@ -108,7 +110,7 @@ function addArole() {
                 name: name,
                 value: id
             }));
-
+//using the inquirer.prompt to diplay an array of questions to answer in order to add a new role into the system.
             inquirer
                 .prompt([
                     {
@@ -136,6 +138,8 @@ function addArole() {
                         });
                 });
         })
+
+        //catches errors it may come across when trying to fetch departments from the database
         .catch(error => {
             console.error(error);
             console.log("Error fetching departments from the database.");
