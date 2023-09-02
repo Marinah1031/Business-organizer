@@ -152,6 +152,7 @@ function addArole() {
 //Add an Employee
 
 function addAnEmployee() {
+    //Using the inquirer library to prompt the user for input of first and last name
     inquirer
     .prompt([
         {
@@ -166,14 +167,16 @@ function addAnEmployee() {
         .then(res => {
           let firstName = res.first_name;
           let lastName = res.last_name;
+          //Calling findAllRoles function to fetch as list of available roles from a database and returns a promise
     db.findAllRoles()
+    //extracts the list of roles into the roles_id and transforms the list into rolesChoices, used as an array of objects with name and value properties.
         .then(([rows]) => {
             const roles_id = rows;
             const rolesChoices = roles_id.map(({ id, title }) => ({
                 name: title,
                 value: id
             }));
-
+//Prompts the user to select a role for the employee from this method and can choose the roles taht are presented in the choices. 
             inquirer
                 .prompt([
                     {
@@ -186,7 +189,7 @@ function addAnEmployee() {
 
                 .then(res => {
                     let roles_id = res.roles_id;
-      
+      //the function fetches a list of existing employees from the database and returns a promise
                     db.findAllEmployees()
                     .then(([rows]) => {
                       let employees = rows;
@@ -194,7 +197,7 @@ function addAnEmployee() {
                         name: `${first_name} ${last_name}`,
                         value: id
                       }));
-    
+    //after transforming the list into managerChoices, it prompts the user to choose an employee as the manager of the new employee.
                       managerChoices.unshift({ name: "None", value: null });
                       inquirer
                       .prompt({
@@ -210,12 +213,13 @@ function addAnEmployee() {
                             first_name: firstName,
                             last_name: lastName
                           }
-    
+    //Inserting the new employee's data into the database
                           db.createNewEmployee(employee);
                         })
                         .then(() => console.log(
                           `Added ${firstName} ${lastName} to the database`
                         ))
+                        //continuation with the application. Bringing back the original set of questions. 
                         .then(() => prompt_questions())
                     })
                 })
@@ -227,13 +231,14 @@ function addAnEmployee() {
 //update an employee role
 
 async function updateRoleOfAnEmployee() {
+    //using the try catch block by wrapping the function in a try block to handle potential errors.
     try {
         const [employeeRows] = await db.findAllEmployees();
         const employeeChoices = employeeRows.map(({ id, first_name, last_name }) => ({
             name: `${first_name} ${last_name}`,
             value: id
         }));
-
+//by using await to asynchronously call functions, it helps keep the order handled more effectively
         const {employeeId} = await inquirer.prompt([
             {
                 type:"list" ,  // list of questions for user input
@@ -242,6 +247,7 @@ async function updateRoleOfAnEmployee() {
                 choices: employeeChoices
                 }
         ]);
+        //the results from fetching a list of all available roles from the db is destructured into rolesRow and it maps it into rolesChoice which is an array of objects that are presented a s a list of choices. 
         const [rolesRow ]=await db.findAllRoles();  
         const rolesChoices = rolesRow.map(({ id, title }) => ({
             name: `${title} ${id}`,
@@ -256,10 +262,11 @@ async function updateRoleOfAnEmployee() {
                 choices: rolesChoices
             }
         ]);
-
+//Using await to call the function to update the employee's role
         await db.updateRoleOfAnEmployee(employeeId, roles_id);
         console.log("Role Updated");
         await prompt_questions();
+    //if there are any errors, they will be logged here and then prompted again if desired
     } catch (error) {
         console.log(error);
         console.log("Error fetching or updating data from the database");
