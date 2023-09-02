@@ -89,7 +89,7 @@ function addAdepartment() {
     inquirer
         .prompt([
             {
-                name: "department",
+                name: "name",
                 message: "What is the name of the department?"
             }
         ])
@@ -113,7 +113,7 @@ function addArole() {
             inquirer
                 .prompt([
                     {
-                        name: 'role',
+                        name: 'title',
                         message: "What name does the role have?"
                     },
                     {
@@ -222,47 +222,65 @@ function addAnEmployee() {
 
 
 //update an employee role
-function updateRoleOfAnEmployee() {
-    db.findAllEmployees()
-        .then(([rows]) => {
-            let employeeId = rows;
-            const employeeChoices = employeeId.map(({ id, first_name, last_name }) =>
-                ({ name: `${first_name} ${last_name}`, value: id }));
-            inquirer
-            .prompt([
-                {
-                    type: 'list',
-                    name: "employeeId",
-                    message: `Which employee's role would you like to change?`,
-                    choices: employeeChoices
-                }
-            ])
-                .then(res => {
-                    let employeeId = res.employeeId;
-                    db.findAllRoles()
-                        .then(([rows]) => {
-                            let roles = rows;
-                            const rolesChoices = roles.map(({ id, title }) => ({
-                                name: title,
-                                value: id
-                            }));
-                            inquirer
-                            .prompt([
-                                {
-                                    type: 'list',
-                                    name: "roles_id",
-                                    message: `What is the new role of this employee?`,
-                                    choices: rolesChoices
-                                }
-                            ])
-                                .then(res => db.updateRoleOfAnEmployee(employeeId, res.roles_id))
-                                .then(() => console.log("Updated Employee's role"))
-                                .then(() => prompt_questions())
-                        })
-                })
-        })
 
+async function updateRoleOfAnEmployee() {
+    try {
+        const [employeeRows] = await db.findAllEmployees();
+        const employeeChoices = employeeRows.map(({ id, first_name, last_name }) => ({
+            name: `${first_name} ${last_name}`,
+            value: id
+        }));
+
+        const {employeeId}
+    }
 }
+// function updateRoleOfAnEmployee() {
+//     db.findAllEmployees()
+//         .then(([rows]) => {
+//             let employeeId = rows;
+//             const employeeChoices = employeeId.map(({ id, first_name, last_name }) =>
+//                 ({ name: `${first_name} ${last_name}`, value: id }));
+//             inquirer
+//             .prompt([
+//                 {
+//                     type: 'list',
+//                     name: "employeeId",
+//                     message: `Which employee's role would you like to change?`,
+//                     choices: employeeChoices
+//                 }
+//             ])
+//                 .then(res => {
+//                     let employeeId = res.employeeId;
+//                     db.findAllRoles()
+//                         .then(([rows]) => {
+//                             let roles = rows;
+//                             const rolesChoices = roles.map(({ id, title }) => ({
+//                                 name: title + ' ' + id,
+//                                 value: id
+//                             }));
+//                             inquirer
+//                             .prompt([
+//                                 {
+//                                     type: 'list',
+//                                     name: "roles_id",
+//                                     message: `What is the new role of this employee?`,
+//                                     choices: rolesChoices
+//                                 }
+//                             ])
+
+//                                 .then(res => db.updateRoleOfAnEmployee(employeeId, res.roles_id))
+//                                 .then(() => console.log("Updated Employee's role"))
+//                                 .then(() => prompt_questions())
+
+//                                 .catch(error => {
+//                                     console.error(error);
+//                                     console.log("Error fetching departments from the database.");
+//                                 });
+//                         })
+//                 })
+//         })
+
+// }
 
 
 

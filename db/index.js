@@ -6,6 +6,7 @@ class DB {
 }
 // Finding all employees, roles and departements are also there to show roles, salaries, departments, and etc. 
 findAllEmployees() {
+  const test = this.connection.promise().query('SELECT * FROM employee').then(r => console.log(r))
     const emp =  this.connection.promise().query(
         "SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name AS department, roles.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN roles on employee.roles_id = roles.id LEFT JOIN department on roles.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;"
     );
@@ -28,10 +29,16 @@ createNewEmployee(employee) {
 
 //Update the employee's role
 updateRoleOfAnEmployee(roles_id, employeeId) {
-    return this.connection.promise().query(
+  console.log(roles_id)
+    const res = this.connection.promise().query(
         "UPDATE employee SET roles_id=? WHERE id=?", [roles_id, employeeId]
-    );
+        ).then(r => {
+          console.log(r)
+          return r
+        })
+        return res;
     }
+
 
     findAllRoles() {
         return this.connection.promise().query(
