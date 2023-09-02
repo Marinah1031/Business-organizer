@@ -39,7 +39,8 @@ updateRoleOfAnEmployee(roles_id, employeeId) {
         return res;
     }
 
-
+//using a database connection that is a property of the curernt object and chaints the promise method 
+// to convert the connection to a promise-based connection for asynchronous database queries. 
     findAllRoles() {
         return this.connection.promise().query(
           "SELECT roles.id, roles.title, department.name AS department, roles.salary FROM roles LEFT JOIN department on roles.department_id = department.id;"
