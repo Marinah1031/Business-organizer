@@ -176,7 +176,7 @@ function addAnEmployee() {
                 name: title,
                 value: id
             }));
-//Prompts the user to select a role for the employee from this method and can choose the roles taht are presented in the choices. 
+//Prompts the user to select a role for the employee from this method and can choose the roles that are presented in the choices. 
             inquirer
                 .prompt([
                     {
