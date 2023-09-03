@@ -33,6 +33,7 @@ These are sources that I referred to for the help of creating this application.
 - Tutors: Trinh Nguyen, Domonique Meeks Gombe
 - SQL documentations
 - Google
+- Past UCI Bootcamp Assignment references
 ## Questions
 
 For further questions regarding the repository, create an issue or contact me at: marinahtam@gmail.com. You can find more of my work on GitHub here: Marinah1031 (https://github.com/Marinah1031 /).
