@@ -11,20 +11,28 @@
 
 ## Table of Contents
 
-* [Installation](#installation)
+* [Installation](#Installation)
 
-* [Usage](#usage)
+* [Usage](#Usage)
 https://opensource.org/licenses/MIT
 * [Acknowledgments](#Acknowledgments)
 
-* [Tests](#tests)
+* [Questions](#Questions)
 
-* [Questions](#questions)
+## Installation
+- To run this application, you must source the sql and npm i for the included packages.
+
+## Usage
+- This application can create an organized business for your companies.
 
 ## Acknowledgments
+These are sources that I referred to for the help of creating this application.
 - Instructors: Jarad K.
 - TA's
 - AskBCS
 - Tutors: Trinh Nguyen, Domonique Meeks Gombe
 - SQL documentations
 - Google
+## Questions
+
+For further questions regarding the repository, create an issue or contact me at: marinahtam@gmail.com. You can find more of my work on GitHub here: Marinah1031 (https://github.com/Marinah1031 /).
